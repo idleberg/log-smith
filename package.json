@@ -1,0 +1,41 @@
+{
+  "name": "log-smith",
+  "version": "0.0.0",
+  "description": "Creates a Markdown changelog from your GitHub releases",
+  "bin": {
+    "log-smith": "./bin/cli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idleberg/log-smith.git"
+  },
+  "keywords": [
+    "changelog",
+    "github releases",
+    "markdown"
+  ],
+  "author": "idleberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/idleberg/log-smith/issues"
+  },
+  "homepage": "https://github.com/idleberg/log-smith#readme",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "commander": "^2.9.0",
+    "request": "^2.80.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.16.1",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-debug": "^3.1.0",
+    "gulp-jshint": "^2.0.4",
+    "gulp-jsonlint": "^1.2.0",
+    "jshint": "^2.9.4"
+  },
+  "scripts": {
+    "test": "gulp lint"
+  }
+}

@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+const Promise = require('bluebird');
+const request = require('request');
+
+const meta = require('../package.json');
+const options = {
+    url: 'https://api.github.com/repos/request/request',
+    headers: {
+        'User-Agent': `${meta.name} v${meta.version}`
+    }
+};
+
+program
+.version(meta.version)
+.usage('[options]')
+.option('-o, --owner [owner]', 'specify repository owner')
+.option('-r, --repo [repository]', 'specify repository name')
+.option('-t, --token [token]', 'specify personal access token')
+.parse(process.argv);
+
+// Did we get all required parameters?
+if (typeof program.owner === 'undefined' || program.owner === true || typeof program.repo === 'undefined' || program.repo === true) {
+    program.help();
+}
+
+// Kudos http://stackoverflow.com/questions/42695180/how-to-iterate-request-calls-and-store-results-in-on-object/42697039#42697039
+function promisifyRequest(currentPage) {
+    let perPage = parseInt(program.per_page) || 30;
+    let url = `https://api.github.com/repos/${program.owner}/${program.repo}/releases?page=${currentPage}&per_page=${perPage}`;
+    if (typeof program.token === 'string') url += `&access_token=${program.token}`;
+
+    return new Promise((resolve, reject) => {
+        request(url, options, (err, res, content) => {
+            if (res.statusCode !== 200) {
+                return reject(res.statusCode);
+            }
+            resolve(JSON.parse(content));
+        });
+    });
+}
+
+function * doRequest() {
+    const result = [];
+    let currentPage = 1;
+    //Might run until gets a empty array.
+    while (true) {
+        let data = yield promisifyRequest(currentPage);
+        if (!data.length) break;
+        //Appends the results of the current page to the total result.
+        result.splice(result.length, 0, ...data);
+        currentPage = currentPage + 1;
+    }
+
+    return result;
+}
+
+Promise.coroutine(doRequest)()
+.then(result => {
+    result.forEach(function(element) {
+        if (!element.tag_name.startsWith('v')) {
+            element.tag_name = 'v' + element.tag_name;
+        }
+        console.log(`# ${element.tag_name} [#](${element.html_url})\n`);
+        console.log(`${element.body.trim()}\n`);
+    });
+});
