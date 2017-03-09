@@ -6,6 +6,3 @@ vendor/
 # package manager files
 npm-debug.log*
 yarn-error.log
-
-# project specific
-*.md
