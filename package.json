@@ -1,6 +1,6 @@
 {
   "name": "log-smith",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Creates a Markdown changelog from your GitHub releases",
   "bin": {
     "log-smith": "./bin/cli"
@@ -20,7 +20,6 @@
     "url": "https://github.com/idleberg/log-smith/issues"
   },
   "homepage": "https://github.com/idleberg/log-smith#readme",
-  "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.0",
     "commander": "^2.9.0",
