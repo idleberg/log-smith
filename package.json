@@ -5,10 +5,7 @@
   "bin": {
     "log-smith": "./bin/cli"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/idleberg/log-smith.git"
-  },
+  "repository": "idleberg/log-smith",
   "keywords": [
     "changelog",
     "github releases",
