@@ -18,12 +18,16 @@ Creates a Markdown changelog from your GitHub releases
 
 See `log-smith -h` for a list of all options
 
-```bash
+```sh
 # Create a changelog for the node-atomizr repository
 $ log-smith -o idleberg -r node-atomizr > CHANGELOG.md
 ```
 
 GitHub's API has a rate limit, allowing 60 requests per hour. You can extend this by providing an [access token](https://github.com/settings/tokens).
+
+```sh
+$ log-smith -o idleberg -r node-atomizr -t <PRIVATE_ACCESS_TOKEN> > CHANGELOG.md
+```
 
 ## License
 
