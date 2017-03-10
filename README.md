@@ -27,7 +27,7 @@ GitHub's API has a rate limit, allowing 60 requests per hour. You can extend thi
 $ log-smith -o idleberg -r node-atomizr -t <PRIVATE_ACCESS_TOKEN> > CHANGELOG.md
 ```
 
-When neither providing owner or repository, `log-smith` will try and use a `package.json` in the current working directory. 
+When neither providing owner or repository, `log-smith` will try and use a `package.json` in the current working directory.
 
 ## License
 
