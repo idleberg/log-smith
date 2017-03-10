@@ -2,6 +2,8 @@
 
 const program = require('commander');
 const Promise = require('bluebird');
+const fs = require('fs');
+const path = require('path');
 const request = require('request');
 
 const meta = require('../package.json');
@@ -21,14 +23,66 @@ program
 .parse(process.argv);
 
 // Did we get all required parameters?
-if (typeof program.owner === 'undefined' || program.owner === true || typeof program.repo === 'undefined' || program.repo === true) {
+if (typeof program.owner === 'undefined' || typeof program.repo === 'undefined') {
+    getLocalPackage(function(data) {
+        program.owner = data[1]
+        program.repo = data[2]
+        logRelease();
+    })
+} else if (program.owner === true || program.repo === true) {
     program.help();
+} else {
+    logRelease();
+}
+
+function getLocalPackage(callback) {
+    const packagePath = path.join(process.cwd(), 'package.json');
+
+    fs.access(packagePath, fs.constants.R_OK | fs.constants.F_OK, (err) => {
+        if (err) {
+            program.help();
+        }
+
+        const packageManifest = require(packagePath);
+        if (packageManifest.hasOwnProperty('repository')) {
+            let pattern, repository, result; 
+
+            if (packageManifest.repository.hasOwnProperty('url')) {
+                repository = packageManifest.repository.url;
+                pattern = /github\.com\/([\w-]+)\/([\w-]+)/
+            } else {
+                repository = packageManifest.repository;
+                pattern = /^([\w-]+)\/([\w-]+)$/
+            }
+
+            result = repository.match(pattern)
+
+            if (result === null) {
+                program.help();
+                callback(null);
+            }
+
+            callback(result);
+        }
+    });
 }
 
 // Kudos http://stackoverflow.com/questions/42695180/how-to-iterate-request-calls-and-store-results-in-on-object/42697039#42697039
+function logRelease() {
+    Promise.coroutine(doRequest)()
+    .then(result => {
+        result.forEach(function(element) {
+            if (!element.tag_name.startsWith('v')) {
+                element.tag_name = 'v' + element.tag_name;
+            }
+            console.log(`# ${element.tag_name} [#](${element.html_url})\n`);
+            console.log(`${element.body.trim()}\n`);
+        });
+    });
+}
+
 function promisifyRequest(currentPage) {
-    let perPage = parseInt(program.per_page) || 30;
-    let url = `https://api.github.com/repos/${program.owner}/${program.repo}/releases?page=${currentPage}&per_page=${perPage}`;
+    let url = `https://api.github.com/repos/${program.owner}/${program.repo}/releases?page=${currentPage}&per_page=30`;
     if (typeof program.token === 'string') url += `&access_token=${program.token}`;
 
     return new Promise((resolve, reject) => {
@@ -55,14 +109,3 @@ function * doRequest() {
 
     return result;
 }
-
-Promise.coroutine(doRequest)()
-.then(result => {
-    result.forEach(function(element) {
-        if (!element.tag_name.startsWith('v')) {
-            element.tag_name = 'v' + element.tag_name;
-        }
-        console.log(`# ${element.tag_name} [#](${element.html_url})\n`);
-        console.log(`${element.body.trim()}\n`);
-    });
-});
