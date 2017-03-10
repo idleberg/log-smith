@@ -14,20 +14,20 @@ Creates a Markdown changelog from your GitHub releases
 
 ## Usage
 
-### CLI
-
-See `log-smith -h` for a list of all options
+This is a CLI applicaiton. See `log-smith -h` for a list of all available options.
 
 ```sh
 # Create a changelog for the node-atomizr repository
 $ log-smith -o idleberg -r node-atomizr > CHANGELOG.md
 ```
 
-GitHub's API has a rate limit, allowing 60 requests per hour. You can extend this by providing an [access token](https://github.com/settings/tokens).
+GitHub's API has a rate limit, allowing 60 requests per hour. You can extend this by providing an [access token](https://github.com/settings/tokens):
 
 ```sh
 $ log-smith -o idleberg -r node-atomizr -t <PRIVATE_ACCESS_TOKEN> > CHANGELOG.md
 ```
+
+When neither providing owner or repository, `log-smith` will try and use a `package.json` in the current working directory. 
 
 ## License
 
