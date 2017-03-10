@@ -8,7 +8,6 @@ const request = require('request');
 
 const meta = require('../package.json');
 const options = {
-    url: 'https://api.github.com/repos/request/request',
     headers: {
         'User-Agent': `${meta.name} v${meta.version}`
     }
@@ -24,10 +23,10 @@ program
 
 if (typeof program.owner === 'undefined' || typeof program.repo === 'undefined') {
     getLocalPackage(function(data) {
-        program.owner = data[1]
-        program.repo = data[2]
+        program.owner = data[1];
+        program.repo = data[2];
         logRelease();
-    })
+    });
 } else if (program.owner === true || program.repo === true) {
     program.help();
 } else {
@@ -48,13 +47,13 @@ function getLocalPackage(callback) {
 
             if (packageManifest.repository.hasOwnProperty('url')) {
                 repository = packageManifest.repository.url;
-                pattern = /github\.com\/([\w-]+)\/([\w-]+)/
+                pattern = /github\.com\/([\w-]+)\/([\w-]+)/;
             } else {
                 repository = packageManifest.repository;
-                pattern = /^([\w-]+)\/([\w-]+)$/
+                pattern = /^([\w-]+)\/([\w-]+)$/;
             }
 
-            result = repository.match(pattern)
+            result = repository.match(pattern);
 
             if (result === null) {
                 program.help();
