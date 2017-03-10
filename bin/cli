@@ -22,7 +22,6 @@ program
 .option('-t, --token [token]', 'specify personal access token')
 .parse(process.argv);
 
-// Did we get all required parameters?
 if (typeof program.owner === 'undefined' || typeof program.repo === 'undefined') {
     getLocalPackage(function(data) {
         program.owner = data[1]
