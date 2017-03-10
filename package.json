@@ -1,6 +1,6 @@
 {
   "name": "log-smith",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Creates a Markdown changelog from your GitHub releases",
   "bin": {
     "log-smith": "./bin/cli"
