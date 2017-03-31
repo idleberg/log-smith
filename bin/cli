@@ -19,6 +19,7 @@ program
 .option('-o, --owner [owner]', 'specify repository owner')
 .option('-r, --repo [repository]', 'specify repository name')
 .option('-t, --token [token]', 'specify personal access token')
+.option('-L, --nolink', 'Skip link to release version')
 .parse(process.argv);
 
 if (typeof program.owner === 'undefined' || typeof program.repo === 'undefined') {
@@ -73,7 +74,11 @@ function logRelease() {
             if (!element.tag_name.startsWith('v')) {
                 element.tag_name = 'v' + element.tag_name;
             }
-            console.log(`# ${element.tag_name} [#](${element.html_url})\n`);
+            if (program.nolink == true) {
+                console.log(`# ${element.tag_name}\n`);
+            } else {
+                console.log(`# ${element.tag_name} [#](${element.html_url})\n`);
+            }
             console.log(`${element.body.trim()}\n`);
         });
     });
