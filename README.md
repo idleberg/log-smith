@@ -14,7 +14,7 @@ Creates a Markdown changelog from your GitHub releases
 
 ## Usage
 
-This is a CLI applicaiton. See `log-smith -h` for a list of all available options.
+This is a CLI application. See `log-smith -h` for a list of all available options.
 
 ```sh
 # Create a changelog for the node-atomizr repository
